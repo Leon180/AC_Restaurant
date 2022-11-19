@@ -25,15 +25,23 @@ db.once('open', () => {
 })
 
 app.get('/', (req, res) => {
-  Restaurant.find().sort('name').lean().then(restaurants => {
-    res.render('index', { restaurants })
-  }).catch(error => console.log(error))
+  Restaurant
+    .find()
+    .sort('name')
+    .lean()
+    .then(restaurants => {
+      res.render('index', { restaurants })
+    }).catch(error => console.log(error))
 })
 
-app.get('/restaurants/:id/details', (req, res) => {
-  Restaurant.findOne({ restaurant_id: req.params.id }).lean().then(restaurant => {
-    res.render('show', { restaurant })
-  }).catch(error => console.log(error))
+app.get('/restaurants/:restaurantId/details', (req, res) => {
+  const { restaurantId } = req.params
+  Restaurant
+    .findById(restaurantId)
+    .lean()
+    .then(restaurant => {
+      res.render('show', { restaurant })
+    }).catch(error => console.log(error))
 })
 
 app.get('/search', (req, res) => {
@@ -46,7 +54,6 @@ app.get('/search', (req, res) => {
       { category: new RegExp(keyword, 'i') }
     ]
   }).sort('name').lean().then(restaurants => {
-    console.log(restaurants)
     res.render('index', { restaurants, keyword })
   }).catch(error => console.log(error))
 })
@@ -61,7 +68,6 @@ app.post('/restaurants/create', (req, res) => {
       console.log(err)
     } else {
       Restaurant.create({
-        restaurant_id: count + 1,
         name: req.body.name,
         name_en: req.body.name_en,
         category: req.body.category,
@@ -77,14 +83,20 @@ app.post('/restaurants/create', (req, res) => {
   })
 })
 
-app.get('/restaurants/:id/edit', (req, res) => {
-  Restaurant.findOne({ restaurant_id: req.params.id }).lean().then(restaurant => {
-    res.render('edit', { submit_form: `${req.params.id}/edit`, restaurant })
-  }).catch(error => console.log(error))
+app.get('/restaurants/:restaurantId/edit', (req, res) => {
+  const { restaurantId } = req.params
+  Restaurant
+    .findById(restaurantId)
+    .lean()
+    .then(restaurant => {
+      res.render('edit', { submit_form: `${restaurantId}/edit`, restaurant })
+    }).catch(error => console.log(error))
 })
 
-app.post('/restaurants/:id/edit', (req, res) => {
-  return Restaurant.findOne({ restaurant_id: req.params.id })
+app.post('/restaurants/:restaurantId/edit', (req, res) => {
+  const { restaurantId } = req.params
+  return Restaurant
+    .findById(restaurantId)
     .then(restaurant => {
       restaurant.name = req.body.name
       restaurant.name_en = req.body.name_en
@@ -97,12 +109,14 @@ app.post('/restaurants/:id/edit', (req, res) => {
       restaurant.description = req.body.description
       return restaurant.save()
     })
-    .then(() => res.redirect(`/restaurants/${req.params.id}/details`))
+    .then(() => res.redirect(`/restaurants/${restaurantId}/details`))
     .catch(error => console.log(error))
 })
 
-app.get('/restaurants/:id/delete', (req, res) => {
-  return Restaurant.findOne({ restaurant_id: req.params.id })
+app.get('/restaurants/:restaurantId/delete', (req, res) => {
+  const { restaurantId } = req.params
+  return Restaurant
+    .findById(restaurantId)
     .then(restaurant => restaurant.remove())
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))

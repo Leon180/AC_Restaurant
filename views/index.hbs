@@ -24,7 +24,7 @@
         {{#each restaurants}}
         <div class="text-secondary">
           <div class="card mb-3">
-            <a href="/restaurants/{{this.restaurant_id}}/details">
+            <a href="/restaurants/{{this._id}}/details">
               <img class="card-img-top" src="{{this.image}}" alt="{{this.name}}" />
             </a>
             <div class="card-body p-3">
@@ -40,9 +40,9 @@
                   <i class="fas fa-star fa-xs"></i>
                 </span>
                 <span>
-                  <a href="/restaurants/{{this.restaurant_id}}/edit">
+                  <a href="/restaurants/{{this._id}}/edit">
                     Edit</a>
-                  <a href="/restaurants/{{this.restaurant_id}}/delete">
+                  <a href="/restaurants/{{this._id}}/delete">
                     Delete</a>
                 </span>
               </div>
