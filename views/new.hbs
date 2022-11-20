@@ -1,19 +1,17 @@
 <!-- ./views/show.handlebars -->
 <div class="container my-5">
-  <form class="row g-3" action="/restaurants/{{ restaurant._id }}?_method=PUT" method="post">
+  <form class="row g-3" action="/restaurants" method="post">
     <div class="col-md-6">
       <label for="name" class="form-label">餐廳名稱</label>
-      <input type="text" class="form-control" placeholder="Name" name="name" value="{{ restaurant.name }}" required>
+      <input type="text" class="form-control" placeholder="Name" name="name" required>
     </div>
     <div class="col-md-6">
       <label for="name_en" class="form-label">餐廳英文名稱</label>
-      <input type="text" class="form-control" placeholder="English name" name="name_en" value="{{ restaurant.name_en }}"
-        required>
+      <input type="text" class="form-control" placeholder="English name" name="name_en" required>
     </div>
     <div class="col-md-6">
       <label for="category" class="form-label">餐廳種類</label>
-      <input list="categories" class="form-control" placeholder="Category" name="category"
-        value="{{ restaurant.category }}" required>
+      <input list="categories" class="form-control" placeholder="Category" name="category" required>
       <datalist id="categories">
         <option>中東料理</option>
         <option>日本料理</option>
@@ -25,33 +23,29 @@
     </div>
     <div class="col-md-6">
       <label for="phone" class="form-label">餐廳電話</label>
-      <input type="text" class="form-control" placeholder="Phone" name="phone" value="{{ restaurant.phone }}" required>
+      <input type="text" class="form-control" placeholder="Phone" name="phone" required>
     </div>
     <div class="col-md-12">
       <label for="image" class="form-label">餐廳圖片(網址)</label>
-      <input type="url" class="form-control" placeholder="Image" name="image" value="{{ restaurant.image }}" required>
+      <input type="url" class="form-control" placeholder="Image" name="image" required>
     </div>
 
     <div class="col-md-12">
       <label for="location" class="form-label">餐廳地址</label>
-      <input type="text" class="form-control" placeholder="Location" name="location" value="{{ restaurant.location }}"
-        required>
+      <input type="text" class="form-control" placeholder="Location" name="location" required>
     </div>
 
     <div class="col-md-12">
       <label for="google_map" class="form-label">Google地圖連結</label>
-      <input type="url" class="form-control" placeholder="Google Map link" name="google_map"
-        value="{{ restaurant.google_map }}" required>
+      <input type="url" class="form-control" placeholder="Google Map link" name="google_map" required>
     </div>
     <div class="col-md-3">
       <label for="rating" class="form-label">評分</label>
-      <input type="number" class="form-control" step="0.1" min="0" max="5" placeholder="Rating" name="rating"
-        value="{{ restaurant.rating }}" required>
+      <input type="number" class="form-control" step="0.1" min="0" max="5" placeholder="Rating" name="rating" required>
     </div>
     <div class="col-md-9">
       <label for="description" class="form-label">請簡短描述這家餐廳</label>
-      <textarea type="text" class="form-control" placeholder="Description" name="description"
-        value="{{ restaurant.description }}" required>{{ restaurant.description }}</textarea>
+      <textarea type="text" class="form-control" placeholder="Description" name="description" required></textarea>
     </div>
     <div class="col-12">
       <button type="submit" class="btn btn-primary">Submit</button>
