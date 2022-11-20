@@ -7,6 +7,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 require('./config/mongoose')
 
+
 // routes
 const routes = require('./routes/index')
 
@@ -15,7 +16,16 @@ const port = 3000
 
 // app setting
 const app = express()
-app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.engine('hbs', exphbs({
+  defaultLayout: 'main',
+  extname: '.hbs',
+  // helper
+  helpers: {
+    selected: (sortSelecting) => {
+      if (sortSelecting) return "selected"
+    }
+  }
+}))
 app.set('view engine', 'hbs')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
