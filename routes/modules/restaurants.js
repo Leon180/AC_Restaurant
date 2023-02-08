@@ -33,6 +33,7 @@ router.get('/:restaurantId', (req, res) => {
     .then(restaurant => {
       res.render('show', { restaurant })
     }).catch(error => console.log(error))
+    
 })
 
 // Edit
