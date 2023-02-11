@@ -1,26 +1,81 @@
+const bcrypt = require('bcryptjs')
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 const db = require('../../config/mongoose')
 
 const Restaurant = require('../restaurant.js')
+const User = require('../user')
 const restaurantJSON = require('../../restaurant.json')
 const restaurantList = restaurantJSON.results
 
+const SEED_USER1 = {
+  email: 'user1@example.com',
+  password: '12345678'
+}
+const SEED_USER2 = {
+  email: 'user2@example.com',
+  password: '12345678'
+}
 
 db.once('open', () => {
-  for (let i = 0; i < restaurantList.length; i++) {
-    Restaurant.create({
-      name: restaurantList[i].name,
-      name_en: restaurantList[i].name_en,
-      category: restaurantList[i].category,
-      image: restaurantList[i].image,
-      location: restaurantList[i].location,
-      phone: restaurantList[i].phone,
-      google_map: restaurantList[i].google_map,
-      rating: restaurantList[i].rating,
-      description: restaurantList[i].description
+  bcrypt
+    .genSalt(10)
+    .then(salt => bcrypt.hash(SEED_USER1.password, salt))
+    .then(hash => User.create({
+      email: SEED_USER1.email,
+      password: hash
+    }))
+    .then(user => {
+      const userId = user._id
+      return Promise.all(Array.from(
+        { length: 3 },
+        (_, i) => Restaurant.create({
+          name: restaurantList[i].name,
+          name_en: restaurantList[i].name_en,
+          category: restaurantList[i].category,
+          image: restaurantList[i].image,
+          location: restaurantList[i].location,
+          phone: restaurantList[i].phone,
+          google_map: restaurantList[i].google_map,
+          rating: restaurantList[i].rating,
+          description: restaurantList[i].description,
+          userId
+        })
+      ))
     })
-  }
-  console.log('done.')
+    .then(() => {
+      console.log('User1 done.')
+    })
+    .then(() => {
+      bcrypt
+        .genSalt(10)
+        .then(salt => bcrypt.hash(SEED_USER2.password, salt))
+        .then(hash => User.create({
+          email: SEED_USER2.email,
+          password: hash
+        }))
+        .then(user => {
+          const userId = user._id
+          return Promise.all(Array.from(
+            { length: 3 },
+            (_, i) => Restaurant.create({
+              name: restaurantList[i + 3].name,
+              name_en: restaurantList[i + 3].name_en,
+              category: restaurantList[i + 3].category,
+              image: restaurantList[i + 3].image,
+              location: restaurantList[i + 3].location,
+              phone: restaurantList[i + 3].phone,
+              google_map: restaurantList[i + 3].google_map,
+              rating: restaurantList[i + 3].rating,
+              description: restaurantList[i + 3].description,
+              userId
+            })
+          ))
+        })
+        .then(() => {
+          console.log('User2 done.')
+          process.exit()
+        })
+    })
 })

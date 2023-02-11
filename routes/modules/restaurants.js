@@ -10,6 +10,7 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/', (req, res) => {
+  const userId = req.user._id
   return Restaurant.create({
     name: req.body.name,
     name_en: req.body.name_en,
@@ -19,28 +20,31 @@ router.post('/', (req, res) => {
     phone: req.body.phone,
     google_map: req.body.google_map,
     rating: req.body.rating,
-    description: req.body.description
+    description: req.body.description,
+    userId
   }).then(() => res.redirect('/'))
     .catch(error => console.log(error))
 })
 
 // Detail
 router.get('/:restaurantId', (req, res) => {
-  const { restaurantId } = req.params
+  const userId = req.user._id
+  const _id = req.params.restaurantId
   Restaurant
-    .findById(restaurantId)
+    .findOne({ _id, userId })
     .lean()
     .then(restaurant => {
       res.render('show', { restaurant })
     }).catch(error => console.log(error))
-    
+
 })
 
 // Edit
 router.get('/:restaurantId/edit', (req, res) => {
-  const { restaurantId } = req.params
+  const userId = req.user._id
+  const _id = req.params.restaurantId
   Restaurant
-    .findById(restaurantId)
+    .findOne({ _id, userId })
     .lean()
     .then(restaurant => {
       res.render('edit', { restaurant })
@@ -48,9 +52,10 @@ router.get('/:restaurantId/edit', (req, res) => {
 })
 
 router.put('/:restaurantId', (req, res) => {
-  const { restaurantId } = req.params
+  const userId = req.user._id
+  const _id = req.params.restaurantId
   return Restaurant
-    .findById(restaurantId)
+    .findOne({ _id, userId })
     .then(restaurant => {
       restaurant.name = req.body.name
       restaurant.name_en = req.body.name_en
@@ -63,15 +68,16 @@ router.put('/:restaurantId', (req, res) => {
       restaurant.description = req.body.description
       return restaurant.save()
     })
-    .then(() => res.redirect(`/restaurants/${restaurantId}`))
+    .then(() => res.redirect(`/restaurants/${_id}`))
     .catch(error => console.log(error))
 })
 
 // Delete
 router.delete('/:restaurantId', (req, res) => {
-  const { restaurantId } = req.params
+  const userId = req.user._id
+  const _id = req.params.restaurantId
   return Restaurant
-    .findById(restaurantId)
+    .findOne({ _id, userId })
     .then(restaurant => restaurant.remove())
     .then(() => res.redirect('/'))
     .catch(error => console.log(error))
