@@ -6,7 +6,7 @@ const Restaurant = require('../../models/restaurant')
 
 // New
 router.get('/new', (req, res) => {
-  return res.render('new')
+  return res.render('new', { login: true })
 })
 
 router.post('/', (req, res) => {
@@ -34,7 +34,7 @@ router.get('/:restaurantId', (req, res) => {
     .findOne({ _id, userId })
     .lean()
     .then(restaurant => {
-      res.render('show', { restaurant })
+      res.render('show', { restaurant, login: true })
     }).catch(error => console.log(error))
 
 })
@@ -47,7 +47,7 @@ router.get('/:restaurantId/edit', (req, res) => {
     .findOne({ _id, userId })
     .lean()
     .then(restaurant => {
-      res.render('edit', { restaurant })
+      res.render('edit', { restaurant, login: true })
     }).catch(error => console.log(error))
 })
 

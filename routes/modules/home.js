@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
   Restaurant.find({ userId })
     .lean()
     .sort({ _id: 'asc' }) // desc
-    .then(restaurants => res.render('index', { restaurants }))
+    .then(restaurants => res.render('index', { restaurants, login: true }))
     .catch(error => console.error(error))
 })
 
@@ -29,7 +29,7 @@ router.get('/search', (req, res) => {
       { category: new RegExp(keyword, 'i') }
     ]
   }).sort(sortMethod[sort]).lean().then(restaurants => {
-    res.render('index', { restaurants, keyword, sortSelecting })
+    res.render('index', { restaurants, keyword, sortSelecting, login: true })
   }).catch(error => console.log(error))
 })
 
