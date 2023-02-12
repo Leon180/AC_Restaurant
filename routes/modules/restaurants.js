@@ -55,19 +55,7 @@ router.put('/:restaurantId', (req, res) => {
   const userId = req.user._id
   const _id = req.params.restaurantId
   return Restaurant
-    .findOne({ _id, userId })
-    .then(restaurant => {
-      restaurant.name = req.body.name
-      restaurant.name_en = req.body.name_en
-      restaurant.category = req.body.category
-      restaurant.image = req.body.image
-      restaurant.location = req.body.location
-      restaurant.phone = req.body.phone
-      restaurant.google_map = req.body.google_map
-      restaurant.rating = req.body.rating
-      restaurant.description = req.body.description
-      return restaurant.save()
-    })
+    .findByIdAndUpdate({ _id, userId }, req.body)
     .then(() => res.redirect(`/restaurants/${_id}`))
     .catch(error => console.log(error))
 })
